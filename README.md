@@ -1,4 +1,4 @@
-# 📼 Rewind — Digital Cassette
+rewind — digital Cassette
 
 > A love letter, in analog. Wrap a song around a personal message and send it as a vintage cassette tape or vinyl record.
 
