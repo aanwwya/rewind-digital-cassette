@@ -70,7 +70,7 @@
       </p>
 
       <!-- CTA button -->
-      <button class="btn-primary" id="startBtn" onclick="showPage('createPage')">
+      <button class="btn-primary" id="startBtn" data-nav="createPage">
         <span class="btn-icon">✦</span>
         Create your cassette
       </button>
@@ -96,7 +96,7 @@
 
     <!-- Back nav -->
     <nav class="page-nav">
-      <button class="btn-ghost" onclick="showPage('homePage')">← Back</button>
+      <button class="btn-ghost" data-nav="homePage">← Back</button>
       <span class="logo-small">Rewind</span>
     </nav>
 
@@ -113,14 +113,19 @@
         <!-- Song Name -->
         <div class="field-group">
           <label class="field-label" for="songInput">Song Name <span class="required">✦</span></label>
-          <input
-            type="text"
-            id="songInput"
-            class="field-input"
-            placeholder="e.g. The Night Will Always Win"
-            maxlength="60"
-            autocomplete="off"
-          />
+          <div class="search-wrap">
+            <input
+              type="text"
+              id="songInput"
+              class="field-input"
+              placeholder="Search a song…"
+              maxlength="60"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <ul id="songResults" class="search-results" role="listbox" aria-label="Song search results"></ul>
+          </div>
+          <p class="field-hint">Powered by iTunes — pick a result to attach a Listen link, or just type freely.</p>
         </div>
 
         <!-- Artist -->
@@ -149,12 +154,6 @@
           <span class="char-count" id="charCount">0 / 200</span>
         </div>
 
-        <!-- Memory Image (optional) -->
-        <div class="field-group">
-          <label class="field-label">Memory Image <span class="optional">(optional)</span></label>
-          <input type="file" id="photoInput" accept="image/*" />
-        </div>
-
         <!-- From (optional) -->
         <div class="field-group">
           <label class="field-label" for="fromInput">From <span class="optional">(optional)</span></label>
@@ -172,10 +171,10 @@
         <div class="field-group">
           <label class="field-label">Format</label>
           <div class="format-toggle">
-            <button class="format-btn active" id="btnCassette" data-format="cassette" onclick="selectFormat('cassette')">
+            <button type="button" class="format-btn active" id="btnCassette" data-format="cassette">
               <span class="format-icon">📼</span> Cassette
             </button>
-            <button class="format-btn" id="btnVinyl" data-format="vinyl" onclick="selectFormat('vinyl')">
+            <button type="button" class="format-btn" id="btnVinyl" data-format="vinyl">
               <span class="format-icon">💿</span> Vinyl
             </button>
           </div>
@@ -184,7 +183,7 @@
         <!-- Theme Selector -->
         <div class="field-group">
           <label class="field-label" for="themeSelector">Theme</label>
-          <select id="themeSelector" class="theme-selector" onchange="applyTheme(this.value)">
+          <select id="themeSelector" class="theme-selector">
             <option value="pink">Soft Pink</option>
             <option value="brown">Brown Vintage</option>
             <option value="dark">Dark Night</option>
@@ -196,7 +195,7 @@
         <p class="form-error hidden" id="formError">Please add a song name and a message. 🌙</p>
 
         <!-- Submit -->
-        <button class="btn-primary full-width" id="createBtn" onclick="createCard()">
+        <button type="button" class="btn-primary full-width" id="createBtn">
           <span class="btn-icon">✦</span>
           Create & Share
         </button>
@@ -208,11 +207,11 @@
         <h3 class="mood-title">Pick a mood</h3>
 
         <div class="mood-buttons">
-          <button onclick="showSuggestions('romantic')">Romantic</button>
-          <button onclick="showSuggestions('sad')">Sad</button>
-          <button onclick="showSuggestions('happy')">Happy</button>
-          <button onclick="showSuggestions('nostalgic')">Nostalgic</button>
-          <button onclick="showSuggestions('lofi')">Lofi</button>
+          <button type="button" data-mood="romantic">Romantic</button>
+          <button type="button" data-mood="sad">Sad</button>
+          <button type="button" data-mood="happy">Happy</button>
+          <button type="button" data-mood="nostalgic">Nostalgic</button>
+          <button type="button" data-mood="lofi">Lofi</button>
         </div>
 
         <div id="suggestionsBox" class="suggestions-box"></div>
@@ -230,7 +229,7 @@
 
     <!-- Top nav -->
     <nav class="page-nav">
-      <button class="btn-ghost" id="playerBackBtn" onclick="showPage('createPage')">← Edit</button>
+      <button class="btn-ghost" id="playerBackBtn" data-target="createPage">← Edit</button>
       <span class="logo-small">Rewind</span>
     </nav>
 
@@ -298,7 +297,6 @@
           <div class="vinyl-spindle" aria-hidden="true"></div>
         </div>
 
-        <div class="hidden-photo" id="hiddenPhoto"></div>
       </div><!-- /tape-wrapper -->
 
 
@@ -316,15 +314,16 @@
 
         <!-- Buttons row -->
         <div class="controls-row">
-          <button class="ctrl-btn" title="Rewind" onclick="rewindPlayer()">⏮</button>
-          <button class="ctrl-btn play-btn" id="playBtn" title="Play" onclick="togglePlay()">▶</button>
-          <button class="ctrl-btn" title="Forward" onclick="forwardPlayer()">⏭</button>
+          <button type="button" class="ctrl-btn" title="Rewind" data-action="rewind">⏮</button>
+          <button type="button" class="ctrl-btn play-btn" id="playBtn" title="Play">▶</button>
+          <button type="button" class="ctrl-btn" title="Forward" data-action="forward">⏭</button>
         </div>
 
         <!-- Song info below controls -->
         <div class="now-playing hidden-start">
           <p class="np-song" id="npSong">—</p>
           <p class="np-artist" id="npArtist">—</p>
+          <a id="songLink" class="song-link hidden" href="#" target="_blank" rel="noopener noreferrer">🎧 Listen on iTunes</a>
         </div>
 
       </div><!-- /player-controls -->
@@ -344,17 +343,17 @@
       <div class="action-row">
 
         <!-- Copy link -->
-        <button class="btn-secondary" id="copyLinkBtn" onclick="copyShareLink()">
+        <button type="button" class="btn-secondary" id="copyLinkBtn">
           🔗 Copy Link
         </button>
 
         <!-- Download card -->
-        <button class="btn-secondary" id="downloadBtn" onclick="downloadCard()">
+        <button type="button" class="btn-secondary" id="downloadBtn">
           💾 Save Card
         </button>
 
         <!-- Make your own -->
-        <button class="btn-primary" onclick="showPage('createPage')">
+        <button type="button" class="btn-primary" data-nav="createPage">
           ✦ Make yours
         </button>
 
@@ -368,6 +367,6 @@
   </section>
 
 
-  <script src="assets/js/script.js"></script>
+  <script type="module" src="assets/js/main.js"></script>
 </body>
 </html>
