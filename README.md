@@ -1,8 +1,8 @@
-rewind digital cassette
+Rewind digital cassette
 
 **Live demo:** https://aanwwya.github.io/rewind-digital-cassette/
 
-rewind is a static, single page web app that lets you craft a shareable "mixtape moment"! pick a song, write a note, choose a theme, and the recipient opens a warm, animated cassette/vinyl player that reveals your message as it plays. everything is encoded into a shareable URL, so there is no backend, no sign-up, and no database.
+Rewind is a static, single page web app that lets you craft a shareable "mixtape moment"! pick a song, write a note, choose a theme, and the recipient opens a warm, animated cassette/vinyl player that reveals your message as it plays. everything is encoded into a shareable URL, so there is no backend, no sign-up, and no database.
 
 ---
 
