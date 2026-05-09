@@ -1,10 +1,69 @@
 /* ═══════════════════════════════════════════════════
    ITUNES SEARCH PROVIDER
-   Free, no auth, CORS-friendly.
+   Uses JSONP via the `callback` param so it works in
+   every browser (mobile Safari has strict CORS).
    Docs: https://performance-partners.apple.com/search-api
 ═══════════════════════════════════════════════════ */
 
 const ENDPOINT = 'https://itunes.apple.com/search';
+
+let cbCounter = 0;
+
+/**
+ * JSONP fetch — injects a <script> tag and resolves with the parsed payload.
+ * Honors AbortSignal by removing the callback and script.
+ */
+function jsonp(url, { signal, timeout = 8000 } = {}) {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) {
+      const err = new Error('Aborted');
+      err.name = 'AbortError';
+      reject(err);
+      return;
+    }
+
+    const cbName = `__rewind_itunes_cb_${Date.now()}_${cbCounter++}`;
+    const sep = url.includes('?') ? '&' : '?';
+    const fullUrl = `${url}${sep}callback=${cbName}`;
+
+    const script = document.createElement('script');
+    let timer;
+
+    const cleanup = () => {
+      delete window[cbName];
+      if (script.parentNode) script.parentNode.removeChild(script);
+      clearTimeout(timer);
+      if (signal) signal.removeEventListener('abort', onAbort);
+    };
+
+    const onAbort = () => {
+      cleanup();
+      const err = new Error('Aborted');
+      err.name = 'AbortError';
+      reject(err);
+    };
+
+    window[cbName] = (data) => {
+      cleanup();
+      resolve(data);
+    };
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error('JSONP request failed'));
+    };
+
+    timer = setTimeout(() => {
+      cleanup();
+      reject(new Error('JSONP request timed out'));
+    }, timeout);
+
+    if (signal) signal.addEventListener('abort', onAbort);
+
+    script.src = fullUrl;
+    document.head.appendChild(script);
+  });
+}
 
 /** @type {import('./provider.js').SearchProvider} */
 export const itunesProvider = {
@@ -20,9 +79,7 @@ export const itunesProvider = {
     url.searchParams.set('media', 'music');
     url.searchParams.set('limit', String(limit));
 
-    const res = await fetch(url.toString(), { signal });
-    if (!res.ok) throw new Error(`iTunes search failed: ${res.status}`);
-    const data = await res.json();
+    const data = await jsonp(url.toString(), { signal });
 
     return (data.results || []).map(r => ({
       id: String(r.trackId),
