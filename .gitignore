@@ -1,0 +1,11 @@
+# Ignore system files and editor backups
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Ignore runtime artifacts
+node_modules/
+.env

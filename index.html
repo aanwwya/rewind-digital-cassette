@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rewind — Send a piece of your heart</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Rewind is a vintage cassette &amp; vinyl message maker. Wrap a song around a personal note and share it with someone who matters." />
+  <meta name="theme-color" content="#c9848a" />
+  <meta name="author" content="aanwwya" />
+
+  <!-- Open Graph / Social previews -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Rewind — Send a piece of your heart" />
+  <meta property="og:description" content="A vintage cassette &amp; vinyl message maker. Wrap a song around a personal note and share it." />
+  <meta property="og:url" content="https://aanwwya.github.io/digital-cassette-/" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Favicon (inline emoji, no asset needed) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%BC%3C/text%3E%3C/svg%3E" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+
+  <!-- Google Fonts: Playfair Display (elegant serif) + Caveat (handwritten) + Lora (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Caveat:wght@400;600&family=Lora:ital@0;1&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════
+       GRAIN OVERLAY — gives a film grain
+       texture across the whole page
+  ════════════════════════════════════ -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- ═══════════════════════════════════
+       SPARKLES CONTAINER — floating stars
+       injected by JS
+  ════════════════════════════════════ -->
+  <div class="sparkles-container" id="sparklesContainer" aria-hidden="true"></div>
+
+  <!-- ══════════════════════════════════
+       PAGE: HOME
+  ═══════════════════════════════════ -->
+  <section class="page" id="homePage">
+
+    <!-- Decorative floating vinyl/cassette silhouettes -->
+    <div class="deco-shapes" aria-hidden="true">
+      <div class="deco-vinyl"></div>
+      <div class="deco-cassette"></div>
+    </div>
+
+    <div class="home-content">
+      <!-- Eyebrow label -->
+      <p class="eyebrow">a love letter, in analog</p>
+
+      <!-- Main headline — emotional hook -->
+      <h1 class="home-title">
+        Play this when<br/>
+        <em>you miss me.</em>
+      </h1>
+
+      <!-- Sub copy -->
+      <p class="home-sub">
+        Send someone a cassette tape or vinyl record<br/>
+        wrapped around a message only they should hear.
+      </p>
+
+      <!-- CTA button -->
+      <button class="btn-primary" id="startBtn" onclick="showPage('createPage')">
+        <span class="btn-icon">✦</span>
+        Create your cassette
+      </button>
+
+      <!-- Tiny footer note -->
+      <p class="home-note">No sign-up. No music needed. Just words that matter.</p>
+    </div>
+
+    <!-- Decorative wavy line -->
+    <div class="wave-divider" aria-hidden="true">
+      <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+        <path d="M0,30 C200,0 400,60 600,30 C800,0 1000,60 1200,30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+    </div>
+
+  </section>
+
+
+  <!-- ══════════════════════════════════
+       PAGE: CREATE
+  ═══════════════════════════════════ -->
+  <section class="page hidden" id="createPage">
+
+    <!-- Back nav -->
+    <nav class="page-nav">
+      <button class="btn-ghost" onclick="showPage('homePage')">← Back</button>
+      <span class="logo-small">Rewind</span>
+    </nav>
+
+    <div class="create-container">
+
+      <div class="create-header">
+        <h2 class="create-title">What song holds<br/><em>this feeling?</em></h2>
+        <p class="create-sub">Fill in the details. We'll wrap it in warmth.</p>
+      </div>
+
+      <!-- ── FORM FIELDS ── -->
+      <div class="form-card">
+
+        <!-- Song Name -->
+        <div class="field-group">
+          <label class="field-label" for="songInput">Song Name <span class="required">✦</span></label>
+          <input
+            type="text"
+            id="songInput"
+            class="field-input"
+            placeholder="e.g. The Night Will Always Win"
+            maxlength="60"
+            autocomplete="off"
+          />
+        </div>
+
+        <!-- Artist -->
+        <div class="field-group">
+          <label class="field-label" for="artistInput">Artist <span class="optional">(optional)</span></label>
+          <input
+            type="text"
+            id="artistInput"
+            class="field-input"
+            placeholder="e.g. Manchester Orchestra"
+            maxlength="60"
+            autocomplete="off"
+          />
+        </div>
+
+        <!-- Message -->
+        <div class="field-group">
+          <label class="field-label" for="msgInput">Your Message <span class="required">✦</span></label>
+          <textarea
+            id="msgInput"
+            class="field-textarea"
+            placeholder="This song makes me think of the drive home when we didn't say anything, but everything was okay…"
+            maxlength="200"
+            rows="4"
+          ></textarea>
+          <span class="char-count" id="charCount">0 / 200</span>
+        </div>
+
+        <!-- Memory Image (optional) -->
+        <div class="field-group">
+          <label class="field-label">Memory Image <span class="optional">(optional)</span></label>
+          <input type="file" id="photoInput" accept="image/*" />
+        </div>
+
+        <!-- From (optional) -->
+        <div class="field-group">
+          <label class="field-label" for="fromInput">From <span class="optional">(optional)</span></label>
+          <input
+            type="text"
+            id="fromInput"
+            class="field-input"
+            placeholder="your name…"
+            maxlength="40"
+            autocomplete="off"
+          />
+        </div>
+
+        <!-- Format Selector -->
+        <div class="field-group">
+          <label class="field-label">Format</label>
+          <div class="format-toggle">
+            <button class="format-btn active" id="btnCassette" data-format="cassette" onclick="selectFormat('cassette')">
+              <span class="format-icon">📼</span> Cassette
+            </button>
+            <button class="format-btn" id="btnVinyl" data-format="vinyl" onclick="selectFormat('vinyl')">
+              <span class="format-icon">💿</span> Vinyl
+            </button>
+          </div>
+        </div>
+
+        <!-- Theme Selector -->
+        <div class="field-group">
+          <label class="field-label" for="themeSelector">Theme</label>
+          <select id="themeSelector" class="theme-selector" onchange="applyTheme(this.value)">
+            <option value="pink">Soft Pink</option>
+            <option value="brown">Brown Vintage</option>
+            <option value="dark">Dark Night</option>
+            <option value="pastel">Pastel Dreamy</option>
+          </select>
+        </div>
+
+        <!-- Error message -->
+        <p class="form-error hidden" id="formError">Please add a song name and a message. 🌙</p>
+
+        <!-- Submit -->
+        <button class="btn-primary full-width" id="createBtn" onclick="createCard()">
+          <span class="btn-icon">✦</span>
+          Create & Share
+        </button>
+
+      </div><!-- /form-card -->
+
+      <div class="mood-section">
+        <p class="divider">— or —</p>
+        <h3 class="mood-title">Pick a mood</h3>
+
+        <div class="mood-buttons">
+          <button onclick="showSuggestions('romantic')">Romantic</button>
+          <button onclick="showSuggestions('sad')">Sad</button>
+          <button onclick="showSuggestions('happy')">Happy</button>
+          <button onclick="showSuggestions('nostalgic')">Nostalgic</button>
+          <button onclick="showSuggestions('lofi')">Lofi</button>
+        </div>
+
+        <div id="suggestionsBox" class="suggestions-box"></div>
+      </div>
+
+    </div><!-- /create-container -->
+
+  </section>
+
+
+  <!-- ══════════════════════════════════
+       PAGE: PLAYER
+  ═══════════════════════════════════ -->
+  <section class="page hidden" id="playerPage">
+
+    <!-- Top nav -->
+    <nav class="page-nav">
+      <button class="btn-ghost" id="playerBackBtn" onclick="showPage('createPage')">← Edit</button>
+      <span class="logo-small">Rewind</span>
+    </nav>
+
+    <div class="player-container">
+
+      <!-- Recipient line -->
+      <p class="player-eyebrow">someone made this for you</p>
+      <!-- ── CASSETTE VISUAL ── -->
+      <div class="tape-wrapper" id="tapeWrapper" aria-label="Cassette tape player">
+
+        <!-- ── CASSETTE TAPE ── -->
+        <div class="cassette" id="cassetteEl">
+          <!-- Outer shell -->
+          <div class="cassette-body">
+
+            <!-- Top cutout window showing reels -->
+            <div class="cassette-window">
+              <div class="reel reel-left" id="reelLeft">
+                <div class="reel-inner"></div>
+                <div class="reel-spoke"></div>
+                <div class="reel-spoke"></div>
+                <div class="reel-spoke"></div>
+              </div>
+              <div class="tape-bridge"></div>
+              <div class="reel reel-right" id="reelRight">
+                <div class="reel-inner"></div>
+                <div class="reel-spoke"></div>
+                <div class="reel-spoke"></div>
+                <div class="reel-spoke"></div>
+              </div>
+            </div>
+
+            <!-- Center label area -->
+            <div class="cassette-label">
+              <p class="label-side">Side A</p>
+              <p class="label-song" id="labelSong">Song Title</p>
+              <p class="label-artist" id="labelArtist">Artist Name</p>
+              <div class="label-stripe"></div>
+            </div>
+
+            <!-- Bottom screw holes decoration -->
+            <div class="cassette-screws" aria-hidden="true">
+              <span class="screw"></span>
+              <span class="screw"></span>
+              <span class="screw"></span>
+              <span class="screw"></span>
+              <span class="screw"></span>
+            </div>
+
+          </div><!-- /cassette-body -->
+        </div><!-- /cassette -->
+
+
+        <!-- ── VINYL RECORD ── -->
+        <div class="vinyl hidden" id="vinylEl" aria-label="Vinyl record">
+          <div class="vinyl-disc" id="vinylDisc">
+            <!-- Grooves rendered via CSS rings -->
+            <div class="vinyl-label-area">
+              <p class="vinyl-label-song" id="vinylSong">Song Title</p>
+              <div class="vinyl-dot"></div>
+              <p class="vinyl-label-artist" id="vinylArtist">Artist</p>
+            </div>
+          </div>
+          <!-- Spindle -->
+          <div class="vinyl-spindle" aria-hidden="true"></div>
+        </div>
+
+        <div class="hidden-photo" id="hiddenPhoto"></div>
+      </div><!-- /tape-wrapper -->
+
+
+      <!-- ── PLAYER CONTROLS ── -->
+      <div class="player-controls">
+
+        <!-- Progress bar (simulated) -->
+        <div class="progress-bar-wrap">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="time-row">
+          <span class="time-stamp" id="currentTime">0:00</span>
+          <span class="time-stamp">3:47</span>
+        </div>
+
+        <!-- Buttons row -->
+        <div class="controls-row">
+          <button class="ctrl-btn" title="Rewind" onclick="rewindPlayer()">⏮</button>
+          <button class="ctrl-btn play-btn" id="playBtn" title="Play" onclick="togglePlay()">▶</button>
+          <button class="ctrl-btn" title="Forward" onclick="forwardPlayer()">⏭</button>
+        </div>
+
+        <!-- Song info below controls -->
+        <div class="now-playing hidden-start">
+          <p class="np-song" id="npSong">—</p>
+          <p class="np-artist" id="npArtist">—</p>
+        </div>
+
+      </div><!-- /player-controls -->
+
+
+      <!-- ── MESSAGE CARD ── -->
+      <div class="message-card hidden-start" id="messageCard">
+        <p class="message-label">✦ a note for you ✦</p>
+        <blockquote class="message-text" id="messageText">
+          Your message will appear here.
+        </blockquote>
+        <p class="from-signature" id="fromSignature"></p>
+      </div>
+
+
+      <!-- ── ACTION BUTTONS ── -->
+      <div class="action-row">
+
+        <!-- Copy link -->
+        <button class="btn-secondary" id="copyLinkBtn" onclick="copyShareLink()">
+          🔗 Copy Link
+        </button>
+
+        <!-- Download card -->
+        <button class="btn-secondary" id="downloadBtn" onclick="downloadCard()">
+          💾 Save Card
+        </button>
+
+        <!-- Make your own -->
+        <button class="btn-primary" onclick="showPage('createPage')">
+          ✦ Make yours
+        </button>
+
+      </div>
+
+      <!-- Toast notification -->
+      <div class="toast" id="toast">Link copied! 🌙</div>
+
+    </div><!-- /player-container -->
+
+  </section>
+
+
+  <script src="assets/js/script.js"></script>
+</body>
+</html>

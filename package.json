@@ -1,0 +1,26 @@
+{
+  "name": "rewind-digital-cassette",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Rewind — a vintage cassette & vinyl message maker. Wrap a song around a personal note and share it via a link.",
+  "homepage": "https://aanwwya.github.io/digital-cassette-/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aanwwya/digital-cassette-.git"
+  },
+  "scripts": {
+    "start": "npx --yes serve .",
+    "dev": "npx --yes serve ."
+  },
+  "keywords": [
+    "cassette",
+    "vinyl",
+    "static-site",
+    "vanilla-js",
+    "github-pages",
+    "canvas",
+    "css-animations"
+  ],
+  "author": "aanwwya",
+  "license": "MIT"
+}
