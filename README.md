@@ -1,99 +1,104 @@
-Rewind digital cassette
+# rewind digital cassette
 
-**Live demo:** https://aanwwya.github.io/rewind-digital-cassette/
+**live demo:** https://aanwwya.github.io/rewind-digital-cassette/
 
-Rewind is a static, single page web app that lets you craft a shareable "mixtape moment"! pick a song, write a note, choose a theme, and the recipient opens a warm, animated cassette/vinyl player that reveals your message as it plays. everything is encoded into a shareable URL, so there is no backend, no sign-up, and no database.
+rewind is a small static web app for making digital mixtapes.
 
----
+pick a song, write a message, choose a theme, and send someone a little cassette or vinyl player with it. when they open the link, the player plays back the song card and reveals the message.
 
-## Features
+there's no account, backend, or database. the whole thing lives in the link itself.
 
-- **Two formats** — animated cassette tape (spinning reels) or vinyl record (rotating disc with grooves)
-- **Four themes** — Soft Pink, Brown Vintage, Dark Night, Pastel Dreamy
-- **Simulated player** — play / pause / scrub with a live progress bar and time counter
-- **Custom message card** with optional sender signature and a "memory image" that reveals on play
-- **Mood-based song suggestions** (Romantic, Sad, Happy, Nostalgic, Lofi)
-- **Shareable links** — entire card state is encoded in URL query parameters
-- **Save as image** — exports the message card to a PNG via `<canvas>`, no external libraries
-- **Polish details** — film-grain overlay, floating sparkles, soft shake on form errors, keyboard shortcut (Space to play/pause)
-- **Fully responsive** and accessible (semantic landmarks, `aria-hidden` on decorative elements)
+## features
 
----
+* cassette or vinyl player
+* 4 visual themes
+* play, pause, scrub, and progress tracking
+* custom message with an optional signature
+* optional memory image
+* mood-based song suggestions
+* shareable links with the full card state encoded in the url
+* save the finished card as a png
+* small details like film grain, sparkles, fades, and keyboard controls
+* responsive layout
 
-## 🛠 Tech Stack
+## stack
 
-| Layer       | Tech                                                |
-| ----------- | --------------------------------------------------- |
-| Markup      | Semantic HTML5                                      |
-| Styling     | Vanilla CSS3 (custom properties, gradients, keyframe animations) |
-| Logic       | Vanilla JavaScript (ES6+) — no frameworks, no build step |
-| Persistence | URL query parameters via `URLSearchParams` + `history.pushState` |
-| Image export| HTML `<canvas>` 2D API                              |
-| Hosting     | GitHub Pages                                        |
+| part         | used                                    |
+| ------------ | --------------------------------------- |
+| markup       | semantic html5                          |
+| styling      | vanilla css                             |
+| logic        | vanilla javascript                      |
+| sharing      | `urlsearchparams` + `history.pushstate` |
+| image export | html `<canvas>`                         |
+| hosting      | github pages                            |
 
-Zero dependencies. Zero build tools. The whole site is three files.
+no frameworks. no dependencies. no build step.
 
----
+the site is essentially just html, css, and javascript.
 
-## 📁 Project Structure
+## project structure
 
-```
+```text
 digital-cassette-/
-├── index.html            # Markup + page structure (Home, Create, Player)
+├── index.html
 ├── assets/
 │   ├── css/
-│   │   └── style.css     # Design tokens, themes, layout, animations
+│   │   └── style.css
 │   └── js/
-│       └── script.js     # State, routing, player sim, share link, canvas export
+│       └── script.js
 ├── LICENSE
-├── package.json          # Project metadata + local dev script
+├── package.json
 └── README.md
 ```
 
----
+## run locally
 
-## 🚀 Run Locally
-
-The project is fully static, so any HTTP server works. Easiest options:
+the project is fully static, so you can run it with any local http server.
 
 ```bash
-# With Node (no install needed)
 npx serve .
+```
 
-# Or with Python
+or:
+
+```bash
 python3 -m http.server 8080
 ```
 
-Then open [http://localhost:3000](http://localhost:3000) (or whatever port the server prints).
+then open the local address shown by the server.
 
-You can also just double-click `index.html` — it works straight from the file system, although the Clipboard API falls back to the legacy path on `file://`.
+you can also open `index.html` directly, although some browser apis behave differently when running from `file://`.
 
----
+## how it works
 
-## 🚢 Deploy
+the app keeps everything in a small state object — song, artist, message, format, theme, and the rest of the card settings.
 
-Hosted on **GitHub Pages** from the `main` branch / root directory. Pushing to `main` redeploys automatically.
+when a card is shared, that state is turned into url parameters. opening the link again rebuilds the same card from the url, so nothing needs to be stored on a server.
 
----
+the player itself is simulated in javascript. a timer updates the current position and progress bar while css handles the cassette reels and vinyl rotation.
 
-## 🧠 How It Works
+the save-as-image feature draws the finished card onto an offscreen canvas and exports it as a png.
 
-1. **Page routing** is a simple `showPage(id)` that toggles a `.hidden` class on three `<section class="page">` elements — no router, no framework.
-2. **State** lives in a single `state` object in `script.js` (song, artist, message, format, theme, etc.).
-3. **Sharing** serializes `state` into a query string (`?song=…&msg=…&fmt=…&theme=…`) and updates the URL with `history.pushState`. On load, `parseUrlAndLoad()` rehydrates the state and jumps directly to the player page.
-4. **Player simulation** uses a `setInterval` that ticks `currentSeconds`, updates the progress bar width, and toggles a `.spinning` class on the cassette reels and vinyl disc to drive the CSS keyframe rotation.
-5. **Card export** paints a gradient background, grain noise, song/artist/message text, and a wrapped quote onto an offscreen canvas, then triggers a download via `<a download>`.
+## a few things i liked building
 
----
+**stateless sharing**
 
-## 🪄 Highlights
+the url is the data. there is no database sitting behind a shared card.
 
-- **No framework, no build** — every byte is hand-written and intentional, which keeps load instant and the code easy to read top-to-bottom.
-- **Stateless sharing** — by encoding the card into the URL, the app is fully serverless yet still feels personal and persistent.
-- **Animation-first feel** — spinning reels, vinyl rotation, sparkles, grain, and gentle fades make a small project feel polished.
+**no framework**
 
----
+everything is written in vanilla html, css, and javascript, which makes the project fairly easy to follow from top to bottom.
 
-## 📜 License
+**the little details**
 
-[MIT](./LICENSE)
+most of the personality comes from the small things — spinning reels, vinyl grooves, grain, sparkles, transitions, and the different visual treatments for each theme.
+
+## deploy
+
+rewind is hosted on github pages.
+
+pushing to the `main` branch redeploys the site.
+
+## license
+
+[mit](https://github.com/aanwwya/rewind-digital-cassette/blob/main/LICENSE)
